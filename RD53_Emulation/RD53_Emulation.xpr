@@ -121,54 +121,6 @@
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="constrs_2" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_2">
-      <File Path="$PPRDIR/../constraints/sma_loopback.xdc">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TargetConstrsFile" Val="$PPRDIR/../constraints/sma_loopback.xdc"/>
-        <Option Name="ConstrsType" Val="XDC"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="gt_sma" Type="BlockSrcs" RelSrcDir="$PSRCDIR/gt_sma">
-      <File Path="$PSRCDIR/sources_1/ip/gt_sma/gt_sma.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_support.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_common_reset.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma.veo"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="tcl/v7ht.tcl"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_stub.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma.dcp"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_funcsim.vhdl"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma/example_design/gt_sma_sync_block.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_multi_gt.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_gt.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma/example_design/gt_sma_rx_startup_fsm.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma/example_design/gt_sma_tx_startup_fsm.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_init.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_gt_usrclk_source.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_common.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma.xml"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_funcsim.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_stub.vhdl"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma_ooc.xdc"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma.xdc"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="gt_sma/example_design/support/gt_sma_clock_module.v"/>
-        <CompFileExtendedInfo CompFileName="gt_sma.xci" FileRelPathName="doc/gtwizard_v3_4_changelog.txt"/>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="gt_sma"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
   </FileSets>
   <Simulators>
     <Simulator Name="XSim">
@@ -208,13 +160,6 @@
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
     </Run>
     <Run Id="fifo_generator_0_synth_1" Type="Ft3:Synth" SrcSet="fifo_generator_0" Part="xc7k325tffg900-2" ConstrsSet="fifo_generator_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/fifo_generator_0_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2014"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-    </Run>
-    <Run Id="gt_sma_synth_1" Type="Ft3:Synth" SrcSet="gt_sma" Part="xc7k325tffg900-2" ConstrsSet="gt_sma" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/gt_sma_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2014"/>
         <Step Id="synth_design"/>
@@ -265,20 +210,6 @@
       </Strategy>
     </Run>
     <Run Id="fifo_generator_0_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg900-2" ConstrsSet="fifo_generator_0" Description="Vivado Implementation Defaults" SynthRun="fifo_generator_0_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2014"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-    </Run>
-    <Run Id="gt_sma_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg900-2" ConstrsSet="gt_sma" Description="Vivado Implementation Defaults" SynthRun="gt_sma_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2014"/>
         <Step Id="init_design"/>
