@@ -2,14 +2,13 @@
 
 module emulator_tb;
 
-reg clk160, clk156, clk156_n, clk156_p, clk200, clk200_n, clk200_p;
-reg rst, ttc_data, ttc_data_n, ttc_data_p;
+reg clk160, clk200, clk200_n, clk200_p;
+reg rst, ttc_data;
 
-wire dataout, dataout_n, dataout_p;
+wire trig_out, cmd_out_n, cmd_out_p;
 
 parameter halfclk200 = 2500;
 parameter halfclk160 = 3125;
-parameter halfclk156 = 3200;
 
 
 initial begin
@@ -30,37 +29,21 @@ initial begin
    forever #(halfclk160) clk160 = ~clk160;
 end
 
-initial begin
-   clk156 = 1'b0;
-   forever #(halfclk156) clk156 = ~clk156;
-end
-
 //Turn into differential signals
 always @ (*) begin
-   clk200_n   <= clk200;
-   clk200_p   <= !clk200;
-   clk156_n   <= clk156;
-   clk156_p   <= !clk156;
-   ttc_data_n <= ttc_data;
-   ttc_data_p <= !ttc_data;
+   clk200_n   <= !clk200;
+   clk200_p   <= clk200;
 end
 
-IBUFDS IBUFDS_out (
-         .O(dataout),
-         .I(dataout_p),
-         .IB(dataout_n)
-);
-
 RD53_top Emulator(
-   .reset(rst),
-   .sysclk_in_n(clk156_n),
-   .sysclk_in_p(clk156_p),
-   .q3_clk0_gtrefclk_pad_n_in(clk200_n),
-   .q3_clk0_gtrefclk_pad_p_in(clk200_p),
-   .ttc_datan(ttc_data_n),
-   .ttc_datap(ttc_data_p),
-   .out_n(dataout_n),
-   .out_p(dataout_p)
+   .rst(rst),
+   .sysclk_in_n(clk200_n),
+   .sysclk_in_p(clk200_p),
+   .ttc_datan(!ttc_data),
+   .ttc_datap(ttc_data),
+   .trig_out(trig_out),
+   .cmd_out_n(cmd_out_n),
+   .cmd_out_p(cmd_out_p)
 );
 
 //Stimulus
@@ -72,7 +55,7 @@ always @(posedge clk160 or posedge rst) begin
    if (rst) begin
    	ttc_data <= 1'b0;
       datareg  <= sync_pattern; //For lock
-      upnext   <= 16'hf0f0; //For something different
+      upnext   <= 16'hAA6A; //For something different
       counter  <= 32'd0;
       other_counter <= 32'd0;
    end 
@@ -86,7 +69,7 @@ always @(posedge clk160 or posedge rst) begin
          other_counter <= other_counter + 1;
          ttc_data <= datareg[15];
          counter  <= 32'd0;
-         if (other_counter < 32'd125) begin
+         if (other_counter < 32'd45) begin
             datareg <= {datareg[14:0],datareg[15]};
          end
          else begin
