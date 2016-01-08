@@ -11,6 +11,8 @@ reg [3:0] shift_in;
 wire trig_out, data_n, data_p;
 wire cmd_out_n, cmd_out_p;
 
+integer x;
+
 parameter halfclk200 = 2500;
 parameter halfclk160 = 3125;
 parameter halfclk40 = 12500;
@@ -66,15 +68,26 @@ always @ (posedge clk40 or posedge rst) begin
    if (rst) begin
       trig     <= 1'b0;
       cmd      <= 1'b0;
+      x        <=    0;
    end
    else begin
-      if (&shift_in) begin
+      if ( x < 200) begin
+         x <= x + 1;
+      end
+      else begin
+         x <= x;
+      end
+      if (x == 180 | trig_out == 1'b1) begin
          trig <= 1'b1;
-         cmd  <= 1'b1;
       end
       else begin
          trig <= 1'b0;
-         cmd  <= 1'b0;
+      end
+      if (&shift_in & x > 180) begin
+         cmd <= 1'b1;
+      end
+      else begin
+         cmd <= 1'b0;
       end
    end
 end
