@@ -52,7 +52,8 @@ always @ (posedge clk160 or posedge rst) begin
    end
 end
 
-//Trigger Encoding (One-hot) for now
+//Trigger Encoding (One-hot and then A) for now
+//I made this up
 always @ (*) begin
    case (trig_sr160)
       4'b0000: encoded_trig_i = 16'hAAA1;  

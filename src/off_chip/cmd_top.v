@@ -18,6 +18,7 @@ LFSR lfsr_inst(
    .dataout(lfsr_data)
 );
 
+//1024 depth
 cmd_fifo cmd_fifo_inst(
     .rst(rst), 
     .wr_clk(clk40), 

@@ -14,6 +14,7 @@ reg wr_cmd_i, wr_cmd;
 wire [15:0] fifo_data_i; 
 wire fifo_full, fifo_data_valid, trig_done, cmd_full;
 //Cross that uncertain clock domain
+//Depth is 16
 fifo_generator_0 word_fifo(
    .rst(rst),
    .wr_clk(clk160),
@@ -28,6 +29,7 @@ fifo_generator_0 word_fifo(
 );
 
 //Decode FSM, decode ant decide if trigger or command
+//I made this up to match the other thing I made up
 always @ (*) begin
    case (fifo_data_i)
       16'hAAA2: begin
