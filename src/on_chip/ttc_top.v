@@ -31,7 +31,7 @@ wire valid_i;
 wire [15:0] data_i, validint;
 wire [1:0] DDRQ;
 
-//****************Other Shit*********************
+//****************Clock Recovery*********************
 reg sample, cheap320, pos2x, neg2x;
 reg posOR, negOR, totOR, negOR_reg, posOR_reg;
 
@@ -74,7 +74,7 @@ always @ (posedge clk640 or posedge rst) begin
 end
 
 assign recovered_clk = sample;
-//****************Other Shit*********************
+//****************Clock Recovery*********************
 
 //Oversample serial data in 4 time domains
 //IDDR IDDR_inst(
