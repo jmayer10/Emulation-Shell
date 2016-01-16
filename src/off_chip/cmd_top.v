@@ -9,6 +9,7 @@ module cmd_top (
 
 wire fifo_full, wr_cmd;
 wire [15:0] lfsr_data;
+wire [10:0] data_count;
 
 LFSR lfsr_inst(
    .clk(clk40),
@@ -29,7 +30,8 @@ cmd_fifo cmd_fifo_inst(
     .dout (cmd_data), 
     .full (fifo_full), 
     .empty(), 
-    .valid(cmd_valid) 
+    .valid(cmd_valid),
+    .rd_data_count(data_count)
 );
 
 endmodule

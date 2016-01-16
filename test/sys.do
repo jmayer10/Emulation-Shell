@@ -63,6 +63,7 @@ add wave -color Purple -label {WR CMD} /sys_tb/dut/ext/command_top/wr_cmd
 add wave -color Purple -label {LFSR Data} -radix hexadecimal /sys_tb/dut/ext/command_top/lfsr_data
 add wave -color Purple -label {Read CMD} /sys_tb/dut/ext/get_cmd_i
 add wave -color Purple -label {CMD Ready} /sys_tb/dut/ext/cmd_rdy
+add wave -color Purple -label {CMD FIFO Data Count} -radix unsigned /sys_tb/dut/ext/command_top/data_count
 add wave -color Purple -label {CMD Full} /sys_tb/dut/ext/command_top/fifo_full
 add wave -color Purple -label {CMD Data} -radix hexadecimal /sys_tb/dut/ext/cmd_data
 
@@ -115,4 +116,4 @@ add wave -color Yellow -label {Cmd Out N} /sys_tb/cmd_out_n
 
 add wave -color Purple -label {Perf Count} -radix unsigned /sys_tb/dut/perf0/counter
 
-run 6 us
+run 20 us

@@ -1,6 +1,6 @@
 //Counts the number of words sent 
 //To know when to send the sync word
-module sync_timer #(parameter freq = 16) //No greater than 31
+module sync_timer #(parameter freq = 31) //No greater than 31
 ( 
    input rst, clk,
    input word_sent,

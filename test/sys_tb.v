@@ -5,13 +5,14 @@ module sys_tb;
 reg rst, clk200, clk160, clk40;
 reg clk200_n, clk200_p;
 reg trig, cmd;
+reg locked;
 
 reg [3:0] shift_in;
 
 wire trig_out, data_n, data_p;
 wire cmd_out_n, cmd_out_p;
 
-integer x;
+integer x, y;
 
 parameter halfclk200 = 2500;
 parameter halfclk160 = 3125;
@@ -66,28 +67,38 @@ sys_top dut(
 
 always @ (posedge clk40 or posedge rst) begin
    if (rst) begin
-      trig     <= 1'b0;
-      cmd      <= 1'b0;
-      x        <=    0;
+      trig   <= 1'b0;
+      cmd    <= 1'b0;
+      locked <= 1'b0;
+      x      <=    0;
+      y      <=    0;
    end
    else begin
-      if ( x < 200) begin
-         x <= x + 1;
-      end
-      else begin
-         x <= x;
-      end
-      if (x == 180 | trig_out == 1'b1) begin
+      if ((x == 180 & !locked) | (x == 40 & locked)) begin //1 MHz trigger
          trig <= 1'b1;
+         x    <= 0;
+         locked <= 1'b1;
       end
       else begin
          trig <= 1'b0;
+         x    <= x + 1;
+         locked <= locked;
       end
-      if (&shift_in & x > 180) begin
-         cmd <= 1'b1;
+      if (trig) begin
+         y   <= 0;
+         cmd <= 1'b0;
       end
       else begin
-         cmd <= 1'b0;
+         y <= y + 1;
+         //if (&shift_in) begin
+         //   cmd <= 1'b1;
+         //end
+         if (y >= 8) begin //commands per trigger
+            cmd <= 1'b0;
+         end
+         else begin
+            cmd <= 1'b1;
+         end
       end
    end
 end
