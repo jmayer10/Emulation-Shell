@@ -17,13 +17,14 @@ IBUFDS IBUFDS_inst(
    .IB(ttc_data_n)
 );
 
-wire clk160, clk640; //  clk320,
+wire clk160, clk320, clk640; //  clk320,
 
 clk_wiz_0 mypll(
    .clk_in1_p(sysclk_in_p),
    .clk_in1_n(sysclk_in_n),
    .clk_out1(clk640),
    .clk_out2(clk160),
+   .clk_out3(clk320),
    .reset(rst),
    .locked(mmcm_locked)
 );
@@ -32,7 +33,7 @@ assign rst_or_lock = rst | !mmcm_locked;
 
 ttc_top ttc_in(
    .clk640(clk640),
-//   .clk320(clk320),
+   .clk320(clk320),
    .clk160(clk160),
    .rst(rst_or_lock),
    .datain(ttc_data),

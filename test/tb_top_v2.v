@@ -103,27 +103,15 @@ always @ (posedge rec_clk1 or posedge rstin) begin
    end
 end
 
-ttc_other chip(
+ttc_top chip(
 	.clk640(clkin4x),
    .clk320(clkin2x),
    .clk160(clkin),
    .rst(rstin),
    .datain(datain),
-   .clr_valid(read),
    .valid(valid),
    .data(dataout),
    .recovered_clk(rec_clk)
-);
-
-ttc_top chip1(
-	.clk640(clkin4x),
-   //.clk320(clkin2x),
-   .clk160(clkin),
-   .rst(rstin),
-   .datain(datain),
-   .valid(valid1),
-   .data(dataout1),
-   .recovered_clk(rec_clk1)
 );
 
 initial

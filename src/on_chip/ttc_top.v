@@ -2,7 +2,7 @@
 //TTC Input Decoder
 module ttc_top (
    input  clk640, 
-//   input  clk320, 
+   input  clk320, 
    input  clk160, 
    input  rst,   //Global external rest
    input  datain, //TTC Serial Stream
@@ -16,32 +16,51 @@ reg  aap, bbp, ccp, ddp, a2, b2;
 reg  aan, bbn, ccn, ddn, c2, d2;
 reg  usea, useb, usec, used, ce;
 reg  useaint, usebint, usecint, usedint;
-reg  [ 1:0] ctrl_reg0, ctrl_reg1, srdata;
-reg  [ 1:0] ddrq_dly;
-reg  [15:0] dataout;
+reg  [1:0] ctrl_reg0, ctrl_reg1, srdata;
+reg  [1:0] ddrq_dly;
 reg  validout;
+reg  [15:0] dataout;
 reg  [3:0] ddrq_data, data_in, data_in_dly;
 
-wire [  1:0] a, b, c, d; //The oversample domains
+wire  [1:0] a, b, c, d; //The oversample domains
 wire [255:0] data_concat;
-wire [  1:0] sdataa, sdatab, sdatac, sdatad,
-             shifta, shiftb, shiftc, shiftd;
-wire [ 15:0] dataint_array [0:15];
+wire [ 1:0] sdataa, sdatab, sdatac, sdatad,
+            shifta, shiftb, shiftc, shiftd;
+wire [15:0] dataint_array [0:15];
 wire valid_i;
 wire [15:0] data_i, validint;
 wire [1:0] DDRQ;
 
+//Oversample serial data in 4 time domains
+IDDR IDDR_inst(
+   .Q1(DDRQ[1]),
+   .Q2(DDRQ[0]),
+   .C(clk320),
+   .CE(1'b1),
+   .D(datain),
+   .R(rst),
+   .S(1'b0)
+);
+
 //****************Clock Recovery*********************
-reg sample, cheap320, pos2x, neg2x;
+reg sample, pos2x, neg2x;
 reg posOR, negOR, totOR, negOR_reg, posOR_reg;
 
 always @ (*) begin
-   posOR <= !rst & ( (useaint & !pos2x) | (usecint & pos2x) ); 
-   negOR <= !rst & ( (usebint & !neg2x) | (usedint & neg2x) );
+   posOR <= !rst & ( (useaint & !pos2x) | (usecint &  pos2x) ); 
+   negOR <= !rst & ( (usebint & !neg2x) | (usedint &  neg2x) );
    totOR <= posOR_reg | negOR_reg; 
 end
+always @ (posedge clk640 or posedge rst) begin
+   if (rst) begin
+      sample  <= 1'b0;
+   end
+   else begin
+      sample  <= totOR;
+   end
+end
 
-always @ (posedge cheap320 or posedge rst) begin
+always @ (posedge clk320 or posedge rst) begin
    if (rst) begin
       pos2x <= 1'b0;
       posOR_reg <= 1'b0;
@@ -51,7 +70,7 @@ always @ (posedge cheap320 or posedge rst) begin
       posOR_reg <= posOR;
    end
 end
-always @ (negedge cheap320 or posedge rst) begin
+always @ (negedge clk320 or posedge rst) begin
    if (rst) begin
       neg2x <= 1'b0;
       negOR_reg <= 1'b0;
@@ -62,48 +81,17 @@ always @ (negedge cheap320 or posedge rst) begin
    end
 end
 
-always @ (posedge clk640 or posedge rst) begin
-   if (rst) begin
-      sample   <= 1'b0;
-      cheap320 <= 1'b0;
-   end
-   else begin
-      sample   <= totOR;
-      cheap320 <= !cheap320;
-   end
-end
-
 assign recovered_clk = sample;
 //****************Clock Recovery*********************
 
-//Oversample serial data in 4 time domains
-//IDDR IDDR_inst(
-//   .Q1(DDRQ[1]),
-//   .Q2(DDRQ[0]),
-//   .C(clk320),
-//   .CE(1'b1),
-//   .D(datain),
-//   .R(rst),
-//   .S(1'b0)
-//);
-//
-//always @ (posedge clk320 or posedge rst) begin
-//   if (rst) begin
-//      ddrq_dly  <= 2'b00;
-//      ddrq_data <= 4'h0;
-//   end
-//   else begin
-//      ddrq_dly  <= DDRQ;
-//      ddrq_data <= {ddrq_dly,DDRQ};
-//   end
-//end
-always @ (posedge clk640 or posedge rst)
-begin
+always @ (posedge clk320 or posedge rst) begin
    if (rst) begin
+      ddrq_dly  <= 2'b00;
       ddrq_data <= 4'h0;
    end
    else begin
-      ddrq_data <= {ddrq_data[2:0], datain};
+      ddrq_dly  <= DDRQ;
+      ddrq_data <= {ddrq_dly,DDRQ};
    end
 end
 
@@ -143,14 +131,6 @@ begin
       //t = 2T
       a2   <= a[1]; b2 <= b[1]; c2 <= c[1]; d2 <= d[1]; 
       //t = 3T
-      //aap  <= (a[0] ^ a[1]) & ~a[1]; 
-      //bbp  <= (b[0] ^ b[1]) & ~b[1];
-      //ccp  <= (c[0] ^ c[1]) & ~c[1];
-      //ddp  <= (d[0] ^ d[1]) & ~d[1];
-      //aan  <= (a[0] ^ a[1]) &  a[1];
-      //bbn  <= (b[0] ^ b[1]) &  b[1];
-      //ccn  <= (c[0] ^ c[1]) &  c[1];
-      //ddn  <= (d[0] ^ d[1]) &  d[1];
       aap  <= (a[1] ^ a2) & ~a2; 
       bbp  <= (b[1] ^ b2) & ~b2;
       ccp  <= (c[1] ^ c2) & ~c2;
@@ -220,14 +200,6 @@ SR16 #(4'h0) ch15(.clk(clk160), .rst(rst), .datain(srdata), .ctrl(ctrl_reg1), .v
 assign data_concat = {dataint_array[15],dataint_array[14],dataint_array[13],dataint_array[12],dataint_array[11],dataint_array[10],dataint_array[9],dataint_array[8],dataint_array[7],dataint_array[6],dataint_array[5],dataint_array[4],dataint_array[3],dataint_array[2],dataint_array[1],dataint_array[0]};
 //Choose the channel to align to
 shift_align channel_align(.clk(clk160), .rst(rst), .valid_in(validint), .datain(data_concat), .valid(valid_i), .dataout(data_i));
-
-//Only write to that FIFO once!
-//always @ (posedge clk160 or posedge rst) begin
-//   if (rst) begin
-//   end
-//   else begin
-//   end
-//end
 
 assign valid   = valid_i;
 assign data    = data_i;
