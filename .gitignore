@@ -1,0 +1,11 @@
+#Enumeration of all the files I want to ignore
+*.log
+*.jou
+*.zip
+*.ini
+*.bit
+*.dat
+*.dbs
+*.rw64
+*.asm64
+*.wdf
