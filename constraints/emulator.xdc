@@ -1,7 +1,7 @@
 ################################## Clock Constraints ##########################
 #create_clock -period 5.0 -waveform {0 2.5} [get_ports sysclk_in_p]
 #create_generated_clock -name emulator/ttc_in/cheap320 -source [get_pins {emulator/mypll/inst/mmcm_adv_inst/CLKOUT0}] -divide_by 2 [get_pins {emulator/ttc_in/cheap320_reg/Q}]
-create_generated_clock -name emulator/ttc_in/rclk -source [get_pins {emulator/mypll/inst/mmcm_adv_inst/CLKOUT0}] -divide_by 3 [get_pins {emulator/ttc_in/sample_reg/Q}] 
+create_generated_clock -name emulator/ttc_in/rclk -source [get_pins {emulator/mypll/clk_out1}] -divide_by 3 [get_pins {emulator/ttc_in/sample_reg/Q}] 
 create_generated_clock -name emualtor/phase_pick/clk40_i -source [get_pins {emulator/ttc_in/sample_reg/Q}] -divide_by 4 [get_pins {emulator/phase_pick/clk_out_reg/Q}]
 ################################# Location constraints (Can be uncommented) ##################### 
 #Reset input
