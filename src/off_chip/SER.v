@@ -15,7 +15,7 @@ reg next_i;
 always @ (posedge clk or posedge rst) begin
    if (rst) begin
       shift_reg <= 16'h0000;
-      count     <=  4'h0;
+      count     <=  4'hF;
       next_i    <=  1'b0;
    end
    else begin

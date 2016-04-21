@@ -3,7 +3,7 @@ module chip_output(
    input  word_valid,
    input  [15:0] data_in,
    output trig_out, //40Mb/s
-   output cmd_out_n, cmd_out_p //1.28Gb/s
+   output [3:0] cmd_out_n, cmd_out_p //1.28Gb/s
 );
 
 reg [15:0] fifo_data;

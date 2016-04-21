@@ -12,8 +12,7 @@ parameter halfclk640 =   781;
 parameter halfclk160 =  3125;
 parameter halfclk40  = 12500;
 
-initial
-begin
+initial begin
 rst = 1'b1 ;
 #((halfclk40*3)-300)
 rst = 1'b0 ;

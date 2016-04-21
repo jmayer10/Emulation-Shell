@@ -3,7 +3,7 @@ module command_out(
    input  wr_cmd,
    input  [15:0] datain,
    output fifo_full,
-   output cmd_out_n, cmd_out_p
+   output [3:0] cmd_out_n, cmd_out_p
 );
 
 localparam sync_pattern = 16'b1000_0001_0111_1110;
@@ -67,10 +67,37 @@ assign oserdes_reverse = {<<{oserdes_datain}};
 //(640*2)/8=160
 //Clocks must be in phase from same MMCM/PLL
 //Rst synced with clkdiv
-cmd_oserdes piso_1280(
+cmd_oserdes piso0_1280(
    .data_out_from_device(oserdes_reverse), //Reverse order b/c D1 is first bit out
-   .data_out_to_pins_p(cmd_out_p),
-   .data_out_to_pins_n(cmd_out_n),
+   .data_out_to_pins_p(cmd_out_p[0]),
+   .data_out_to_pins_n(cmd_out_n[0]),
+   .clk_in(clk640),
+   .clk_div_in(clk160),
+   .io_reset(rst)
+);
+
+cmd_oserdes piso1_1280(
+   .data_out_from_device(oserdes_reverse), //Reverse order b/c D1 is first bit out
+   .data_out_to_pins_p(cmd_out_p[1]),
+   .data_out_to_pins_n(cmd_out_n[1]),
+   .clk_in(clk640),
+   .clk_div_in(clk160),
+   .io_reset(rst)
+);
+
+cmd_oserdes piso2_1280(
+   .data_out_from_device(oserdes_reverse), //Reverse order b/c D1 is first bit out
+   .data_out_to_pins_p(cmd_out_p[2]),
+   .data_out_to_pins_n(cmd_out_n[2]),
+   .clk_in(clk640),
+   .clk_div_in(clk160),
+   .io_reset(rst)
+);
+
+cmd_oserdes piso3_1280(
+   .data_out_from_device(oserdes_reverse), //Reverse order b/c D1 is first bit out
+   .data_out_to_pins_p(cmd_out_p[3]),
+   .data_out_to_pins_n(cmd_out_n[3]),
    .clk_in(clk640),
    .clk_div_in(clk160),
    .io_reset(rst)

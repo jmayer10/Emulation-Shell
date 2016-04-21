@@ -3,7 +3,7 @@ module RD53_top (
    input  sysclk_in_n, sysclk_in_p,
    input  ttc_data_n, ttc_data_p,
    output trig_out,
-   output cmd_out_n, cmd_out_p
+   output [3:0] cmd_out_n, cmd_out_p
 );
 
 wire valid_i, mmcm_locked;
