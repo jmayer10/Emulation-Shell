@@ -1,5 +1,5 @@
 ################################## Clock Constraints ##########################
-#create_clock -period 5.0 -waveform {0 2.5} [get_ports sysclk_in_p]
+create_clock -period 5.0 -waveform {0 2.5} [get_ports sysclk_in_p]
 #create_generated_clock -name emulator/ttc_in/cheap320 -source [get_pins {emulator/mypll/inst/mmcm_adv_inst/CLKOUT0}] -divide_by 2 [get_pins {emulator/ttc_in/cheap320_reg/Q}]
 create_generated_clock -name emulator/ttc_in/rclk -source [get_pins {emulator/mypll/clk_out1}] -divide_by 3 [get_pins {emulator/ttc_in/sample_reg/Q}] 
 create_generated_clock -name emualtor/phase_pick/clk40_i -source [get_pins {emulator/ttc_in/sample_reg/Q}] -divide_by 4 [get_pins {emulator/phase_pick/clk_out_reg/Q}]
@@ -34,7 +34,7 @@ set_property IOSTANDARD LVDS_25 [get_ports cmd3_out_n]
 set_property PACKAGE_PIN C19 [get_ports cmd3_out_p]
 set_property IOSTANDARD LVDS_25 [get_ports cmd3_out_p]
 
-set_property PACKAGE_PIN C25 [get_ports trig_out]
+set_property PACKAGE_PIN D26 [get_ports trig_out]
 set_property IOSTANDARD LVCMOS25 [get_ports trig_out]
 
 #OFF-CHIP Ports
@@ -45,9 +45,9 @@ set_property IOSTANDARD LVCMOS25 [get_ports trigger]
 set_property PACKAGE_PIN H27 [get_ports command]
 set_property IOSTANDARD LVCMOS25 [get_ports command]
 #The loopback ports
-set_property PACKAGE_PIN E30 [get_ports dataout_n] #TTC out n
+set_property PACKAGE_PIN E30 [get_ports dataout_n]
 set_property IOSTANDARD LVDS_25 [get_ports dataout_n]
-set_property PACKAGE_PIN E29 [get_ports dataout_p] #TTC out p
+set_property PACKAGE_PIN E29 [get_ports dataout_p]
 set_property IOSTANDARD LVDS_25 [get_ports dataout_p]
 #Not Yet Declared ports but that match the PCB
 #set_property PACKAGE_PIN B29 [get_ports cmd0_in_n]
